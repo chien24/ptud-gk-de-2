@@ -1,5 +1,4 @@
-{% extends "base.html" %} {% block title %} Home - Task Management System {%
-endblock title %} {% block content %}
+{% extends 'base.html' %} {% block title %}Home - Task Management System{%endblock %} {% block content %}
 <div class="container mt-5">
   <div class="jumbotron">
     <h1 class="display-4">Welcome to Task Management System</h1>
@@ -9,21 +8,21 @@ endblock title %} {% block content %}
     <hr class="my-4" />
     {% if user.is_authenticated %}
     <p>Start managing your tasks now!</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'task_list' %}" role="button"
+    <a class="btn btn-primary btn-lg" href="{% url 'taskapp:task_list' %}" role="button"
       >View Tasks</a
     >
     <a
       class="btn btn-success btn-lg"
-      href="{% url 'task_create' %}"
+      href="{% url 'taskapp:task_create' %}"
       role="button"
       >Create New Task</a
     >
     {% else %}
     <p>Please login or register to start using the system.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button"
+    <a class="btn btn-primary btn-lg" href="{% url 'userapp:login' %}" role="button"
       >Login</a
     >
-    <a class="btn btn-success btn-lg" href="{% url 'register' %}" role="button"
+    <a class="btn btn-success btn-lg" href="{% url 'userapp:register' %}" role="button"
       >Register</a
     >
     {% endif %}
@@ -68,4 +67,4 @@ endblock title %} {% block content %}
     </div>
   </div>
 </div>
-{% endblock content %}
+{% endblock %}
