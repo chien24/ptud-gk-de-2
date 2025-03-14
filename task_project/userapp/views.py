@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from taskapp.models import  Category
+from taskapp.models import Category
 from .models import Profile
 
 def register(request):
@@ -12,20 +12,19 @@ def register(request):
             user = form.save()
             
             # Tạo profile cho user
-            # Profile model chưa được import
             profile = Profile.objects.create(user=user)
             
             # Tạo các danh mục mặc định
             default_categories = ['Công việc', 'Cá nhân', 'Học tập']
             for cat_name in default_categories:
-                Category.objects.create(name=cat_name, user=user)
+                Category.objects.create(name=cat_name, created_by=user)
                 
             username = form.cleaned_data.get('username')
             messages.success(request, f'Tài khoản cho {username} đã được tạo! Bạn có thể đăng nhập ngay.')
-            return redirect('login')
+            return redirect('userapp:login')
     else:
         form = UserRegisterForm()
-    return render(request, 'users/register.html', {'form': form})
+    return render(request, 'user/register.html', {'form': form})
 
 @login_required
 def profile(request):
@@ -37,7 +36,7 @@ def profile(request):
             u_form.save()
             p_form.save()
             messages.success(request, 'Thông tin của bạn đã được cập nhật!')
-            return redirect('profile')
+            return redirect('userapp:profile')
     else:
         u_form = UserUpdateForm(instance=request.user)
         p_form = ProfileUpdateForm(instance=request.user.profile)
@@ -46,4 +45,4 @@ def profile(request):
         'u_form': u_form,
         'p_form': p_form
     }
-    return render(request, 'users/profile.html', context)
+    return render(request, 'user/profile.html', context)
