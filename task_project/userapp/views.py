@@ -26,6 +26,32 @@ def register(request):
         form = UserRegisterForm()
     return render(request, 'user/register.html', {'form': form})
 
+def login_view(request):
+    if request.user.is_authenticated:
+        return redirect('taskapp:task_list')
+        
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+        user = authenticate(request, username=username, password=password)
+        
+        if user is not None:
+            login(request, user)
+            messages.success(request, f'Chào mừng {username} đã quay trở lại!')
+            next_url = request.GET.get('next')
+            if next_url:
+                return redirect(next_url)
+            return redirect('taskapp:task_list')
+        else:
+            messages.error(request, 'Tên đăng nhập hoặc mật khẩu không chính xác.')
+    
+    return render(request, 'userapp/login.html')
+
+def logout_view(request):
+    logout(request)
+    messages.success(request, 'Bạn đã đăng xuất thành công.')
+    return redirect('userapp:login')
+
 @login_required
 def profile(request):
     if request.method == 'POST':
