@@ -1,0 +1,97 @@
+{% extends 'base.html' %}
+
+{% block title %}Danh Sách Công Việc{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1>Danh Sách Công Việc</h1>
+    <div>
+        <a href="{% url 'task_create' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Tạo Công Việc Mới
+        </a>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Lọc Theo Danh Mục</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-flex flex-wrap">
+                    <a href="{% url 'task_list' %}" class="btn {% if selected_category == None %}btn-primary{% else %}btn-outline-primary{% endif %} me-2 mb-2">
+                        Tất cả
+                    </a>
+                    {% for category in categories %}
+                    <a href="{% url 'task_list' %}?category={{ category.id }}" class="btn {% if selected_category == category.id %}btn-primary{% else %}btn-outline-primary{% endif %} me-2 mb-2">
+                        {{ category.name }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if tasks %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for task in tasks %}
+    <div class="col">
+        <div class="card h-100 {% if task.status == 'completed' %}border-success{% elif task.status == 'in_progress' %}border-warning{% else %}border-info{% endif %}">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">{{ task.title }}</h5>
+                <span class="badge {% if task.status == 'completed' %}bg-success{% elif task.status == 'in_progress' %}bg-warning{% else %}bg-info{% endif %}">
+                    {{ task.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <p class="card-text">{{ task.description|truncatechars:100 }}</p>
+                
+                {% if task.category %}
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-folder me-1"></i> {{ task.category.name }}
+                    </small>
+                </p>
+                {% endif %}
+                
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-calendar me-1"></i> Tạo: {{ task.created|date:"d/m/Y H:i" }}
+                    </small>
+                </p>
+                
+                {% if task.finished %}
+                <p class="card-text">
+                    <small class="text-muted">
+                        <i class="fas fa-check-circle me-1"></i> Hoàn thành: {{ task.finished|date:"d/m/Y H:i" }}
+                    </small>
+                </p>
+                {% endif %}
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'task_detail' task.pk %}" class="btn btn-sm btn-primary">
+                        <i class="fas fa-eye"></i> Chi tiết
+                    </a>
+                    <div>
+                        <a href="{% url 'task_update' task.pk %}" class="btn btn-sm btn-warning">
+                            <i class="fas fa-edit"></i> Sửa
+                        </a>
+                        <a href="{% url 'task_delete' task.pk %}" class="btn btn-sm btn-danger">
+                            <i class="fas fa-trash"></i> Xóa
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-info">
+    <p class="mb-0">Không có công việc nào. Bạn có thể tạo công việc mới bằng cách nhấn vào nút "Tạo Công Việc Mới" ở trên.</p>
+</div>
+{% endif %}
+{% endblock %}

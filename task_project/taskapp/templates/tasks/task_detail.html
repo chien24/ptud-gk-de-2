@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="card mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <h1 class="mb-0">{{ task.title }}</h1>
+        <span class="badge {% if task.status == 'completed' %}bg-success{% elif task.status == 'in_progress' %}bg-warning{% else %}bg-info{% endif %} fs-6">
+            {{ task.get_status_display }}
+        </span>
+    </div>
+    <div class="card-body">
+        <div class="mb-4">
+            <h5>Mô tả</h5>
+            <p>{{ task.description|linebreaks|default:"Không có mô tả" }}</p>
+        </div>
+        
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Thông tin</h5>
+                <ul class="list-group">
+                    {% if task.category %}
+                    <li class="list-group-item">
+                        <i class="fas fa-folder me-2"></i> Danh mục: {{ task.category.name }}
+                    </li>
+                    {% endif %}
+                    <li class="list-group-item">
+                        <i class="fas fa-calendar me-2"></i> Ngày tạo: {{ task.created|date:"d/m/Y H:i" }}
+                    </li>
+                    {% if task.finished %}
+                    <li class="list-group-item">
+                        <i class="fas fa-check-circle me-2"></i> Ngày hoàn thành: {{ task.finished|date:"d/m/Y H:i" }}
+                    </li>
+                    {% endif %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Thông tin người dùng</h5>
+                <div class="d-flex align-items-center">
+                    <img src="{{ task.user.profile.avatar.url }}" alt="{{ task.user.username }}" class="rounded-circle me-3" width="60">
+                    <div>
+                        <h6 class="mb-0">{{ task.user.username }}</h6>
+                        <p class="text-muted mb-0">{{ task.user.email }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'task_list' %}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left"></i> Quay lại
+            </a>
+            <div>
+                <a href="{% url 'task_update' task.pk %}" class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Sửa
+                </a>
+                <a href="{% url 'task_delete' task.pk %}" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Xóa
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,71 @@
+{% extends "base.html" %} {% block title %} Home - Task Management System {%
+endblock title %} {% block content %}
+<div class="container mt-5">
+  <div class="jumbotron">
+    <h1 class="display-4">Welcome to Task Management System</h1>
+    <p class="lead">
+      Manage your tasks efficiently and collaborate with team members.
+    </p>
+    <hr class="my-4" />
+    {% if user.is_authenticated %}
+    <p>Start managing your tasks now!</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'task_list' %}" role="button"
+      >View Tasks</a
+    >
+    <a
+      class="btn btn-success btn-lg"
+      href="{% url 'task_create' %}"
+      role="button"
+      >Create New Task</a
+    >
+    {% else %}
+    <p>Please login or register to start using the system.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'login' %}" role="button"
+      >Login</a
+    >
+    <a class="btn btn-success btn-lg" href="{% url 'register' %}" role="button"
+      >Register</a
+    >
+    {% endif %}
+  </div>
+
+  <div class="row mt-5">
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-tasks me-2"></i>Task Management
+          </h5>
+          <p class="card-text">
+            Create and track your tasks with clear status and deadlines.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-folder me-2"></i>Categories
+          </h5>
+          <p class="card-text">
+            Organize tasks into categories for better management and searching.
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card h-100">
+        <div class="card-body">
+          <h5 class="card-title">
+            <i class="fas fa-user-circle me-2"></i>User Profile
+          </h5>
+          <p class="card-text">
+            Customize your profile with avatar and personal information.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

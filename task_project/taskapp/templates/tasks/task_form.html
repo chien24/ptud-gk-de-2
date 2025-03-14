@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ title }}{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h1 class="mb-0">{{ title }}</h1>
+    </div>
+    <div class="card-body">
+        <form method="POST">
+            {% csrf_token %}
+            
+            <div class="mb-3">
+                <label for="{{ form.title.id_for_label }}" class="form-label">Tiêu đề</label>
+                {{ form.title }}
+                {% if form.title.errors %}
+                    <div class="text-danger">{{ form.title.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.description.id_for_label }}" class="form-label">Mô tả</label>
+                {{ form.description }}
+                {% if form.description.errors %}
+                    <div class="text-danger">{{ form.description.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.status.id_for_label }}" class="form-label">Trạng thái</label>
+                {{ form.status }}
+                {% if form.status.errors %}
+                    <div class="text-danger">{{ form.status.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="mb-3">
+                <label for="{{ form.category.id_for_label }}" class="form-label">Danh mục</label>
+                {{ form.category }}
+                {% if form.category.errors %}
+                    <div class="text-danger">{{ form.category.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="d-flex justify-content-between">
+                <button type="submit" class="btn btn-primary">Lưu</button>
+                <a href="{% url 'task_list' %}" class="btn btn-secondary">Hủy</a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Thêm các class Bootstrap vào form elements
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('{{ form.title.id_for_label }}').classList.add('form-control');
+        document.getElementById('{{ form.description.id_for_label }}').classList.add('form-control');
+        document.getElementById('{{ form.status.id_for_label }}').classList.add('form-select');
+        document.getElementById('{{ form.category.id_for_label }}').classList.add('form-select');
+    });
+</script>
+{% endblock %}
